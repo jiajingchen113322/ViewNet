@@ -1,0 +1,27 @@
+backbone: mymodel
+data_aug: true
+<<<<<<< HEAD
+data_path: /data1/jiajing/dataset/scanobjectnn/ScanObjectNN_fs_cross_validation/Data
+=======
+data_path: /home/jchen152/workspace/Data/ScanObjectNN_fs_crossvalidation/ScanObjectNN_fs_cross_validation/Data
+>>>>>>> 873586cf7c37860605c5c603b1343491f58ecc74
+decay_ep: 5
+device: cuda
+epochs: 80
+exp_folder_name: ScanObjectNN_cross
+exp_name: Mymodel_5k1s10q_fold0
+fold: 0
+fs_head: trip
+gamma: 0.7
+k_way: 5
+lr: 0.0001
+lr_sch: false
+n_shot: 1
+<<<<<<< HEAD
+project_path: /data1/jiajing/worksapce/My_Research/few_shot_point/Few_Shot_Point_Cloud
+=======
+project_path: /home/jchen152/workspace/Few_Shot_Point_Cloud
+>>>>>>> 873586cf7c37860605c5c603b1343491f58ecc74
+query: 10
+seed: 0
+train: true

@@ -1,0 +1,17 @@
+backbone: mymodel
+data_aug: true
+data_path: /home/jchen152/workspace/Data/modelnet40_fs/modelnet40_ply_hdf5_2048_fs
+decay_ep: 5
+device: cuda
+epochs: 80
+exp_name: mymodel+trip_moreview_10q5s_gamma0.7
+fs_head: trip
+gamma: 0.7
+k_way: 5
+lr: 0.0001
+lr_sch: true
+n_shot: 5
+project_path: /home/jchen152/workspace/Few_Shot_Point_Cloud
+query: 5
+seed: 0
+train: true

@@ -1,0 +1,1 @@
+{"exp_name": "dgcnn+cia+cosim", "epochs": 80, "decay_ep": 5, "gamma": 0.5, "lr": 0.001, "train": true, "seed": 0, "data_path": "/data1/jiajing/dataset/ModelNet40_fewshot/modelnet40_ply_hdf5_2048_fs", "device": "cuda:0", "k_way": 5, "n_shot": 1, "query": 5, "backbone": "dgcnn", "fs_head": "cia"}

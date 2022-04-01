@@ -1,0 +1,14 @@
+backbone: mv
+data_path: /data1/jiajing/dataset/ModelNet40_fewshot/modelnet40_ply_hdf5_2048_fs
+decay_ep: 5
+device: cuda:0
+epochs: 80
+exp_name: multiview+protonet_lr10-4
+fs_head: protonet
+gamma: 0.5
+k_way: 5
+lr: 0.0001
+n_shot: 1
+query: 5
+seed: 0
+train: true

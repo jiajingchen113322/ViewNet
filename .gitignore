@@ -1,0 +1,10 @@
+pth_file
+__pycache__
+.vscode
+prac.py
+README.md
+other
+condor.*
+command.txt
+Analysis
+ShapeNet*
