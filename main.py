@@ -24,7 +24,7 @@ import logging
 # ============== Get Configuration =================
 def get_arg():
     cfg=argparse.ArgumentParser()
-    cfg.add_argument('--exp_name',default='Mymodel_5k1s10q_fold0')
+    cfg.add_argument('--exp_name',default='Mymodel_5k1s15q_fold1')
     cfg.add_argument('--multigpu',default=False)
     cfg.add_argument('--epochs',default=80)
     cfg.add_argument('--decay_ep',default=5)
@@ -39,18 +39,18 @@ def get_arg():
     # ======== path needed ==============#
     cfg.add_argument('--project_path',default='/home/jchen152/workspace/Few_Shot_Point_Cloud')
     
-    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/modelnet40_missing')
-    cfg.add_argument('--exp_folder_name',default='ModelNet40_cross_missing')
+    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ModelNet40_C_fewshot')
+    cfg.add_argument('--exp_folder_name',default='ModelNet40_C_cross')
     # ===================================#
 
     
     # ======== few shot cfg =============#
     cfg.add_argument('--k_way',default=5)
     cfg.add_argument('--n_shot',default=1)
-    cfg.add_argument('--query',default=10)
+    cfg.add_argument('--query',default=15)
     cfg.add_argument('--backbone',default='mymodel',choices=['dgcnn','mv','gaitset','mymodel','pointview'])
     cfg.add_argument('--fs_head',type=str,default='trip',choices=['protonet','cia','trip','pv_trip'])
-    cfg.add_argument('--fold',default=0)
+    cfg.add_argument('--fold',default=1)
     # ===================================#
     
     return cfg.parse_args()
