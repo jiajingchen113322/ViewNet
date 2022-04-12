@@ -21,6 +21,7 @@ from model.fs_module.protonet import protonet
 from model.fs_module.cia import CIA 
 from model.fs_module.trip import trip
 from model.fs_module.pointview_trip import pointview_trip
+from model.fs_module.contrastive_loss_bin import Trip_CIA
 
 
 #===============================
@@ -85,6 +86,12 @@ class fs_network(nn.Module):
             print('point view trip is loaded')
             return pointview_trip(k_way=self.k,n_shot=self.n,query=self.query)
         
+
+        elif fs=='Trip_CIA':
+            print('Trip_CIA is loaded')
+            return Trip_CIA(k_way=self.k,n_shot=self.n,query=self.query)
+
+
         else:
             raise ValueError('Illegal fs_head')
              

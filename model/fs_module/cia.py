@@ -72,7 +72,7 @@ class CIA(nn.Module):
 
         # === get R matrix ===
         R_mat=torch.bmm(q.unsqueeze(-1),k.unsqueeze(1))
-        R_mat=nn.functional.softmax(R_mat,0)
+        R_mat=nn.functional.softmax(R_mat,1)
         # ====================
 
         final_feat=torch.bmm(v.unsqueeze(1),R_mat).squeeze(1)+v
