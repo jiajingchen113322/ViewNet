@@ -70,7 +70,40 @@ class view_pooling(nn.Module):
         return feat
 
 
+class view_pooling_attention(nn.Module):
+    def __init__(self,inchannel=32,out_channel=32):
+        super().__init__()
+        self.net=nn.Sequential(nn.Conv2d(6*inchannel,out_channel,kernel_size=3,padding=1),
+                               nn.ReLU())
 
+
+        self.score_mat=nn.Sequential(nn.Conv2d(6*inchannel,inchannel,kernel_size=1),
+                                    nn.ReLU(),
+                                    nn.Conv2d(inchannel,6,kernel_size=1),
+                                    nn.Sigmoid())
+        self.inchannel=inchannel
+    
+    def forward(self,x):
+        '''
+        x's shape is (bs,6,32,64,64)
+        '''
+        lr=torch.max(x[:,[0,2],:,:],1)[0] # left and right
+        fb=torch.max(x[:,[1,3],:,:],1)[0] # front and back
+        tb=torch.max(x[:,[4,5],:,:],1)[0] # top and bottom
+        
+        lft=torch.max(x[:,[0,1,4],:,:],1)[0] # left front and top
+        rbb=torch.max(x[:,[2,3,5],:,:],1)[0] # right back and bottom
+        
+        al=torch.max(x,1)[0]
+        
+        feat=torch.cat([al,lr,fb,tb,lft,rbb],1)
+        sm=self.score_mat(feat)
+        sm=torch.repeat_interleave(sm,self.inchannel,dim=1)
+        feat=feat*sm
+
+        feat=self.net(feat)
+        
+        return feat
 
 
 

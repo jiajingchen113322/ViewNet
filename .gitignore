@@ -7,4 +7,6 @@ other
 condor.*
 command.txt
 Analysis
-ShapeNet*
+ShapeNet_3cross
+ShapeNet70*
+*.npy

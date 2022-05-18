@@ -19,7 +19,8 @@ class ShapeNet_fs(Dataset):
 
         # === dataset config ====
         self.num_cls=55
-        self.fold_num=[0,20,40,55]
+        # self.fold_num=[0,11,22,33,44,55] #ShapeNet
+        self.fold_num=[0,20,40,70] #ShapeNet_fs70
         # self.sample_per_fold=int(self.num_cls/self.fold_num)
         # =======================
 
