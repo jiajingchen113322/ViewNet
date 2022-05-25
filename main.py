@@ -28,7 +28,7 @@ import logging
 # ============== Get Configuration =================
 def get_arg():
     cfg=argparse.ArgumentParser()
-    cfg.add_argument('--exp_name',default='Mymodel_attention_5k5s10q_cl_fold2')
+    cfg.add_argument('--exp_name',default='dgcnn_MetaOp_5k5s10q_fold2')
     cfg.add_argument('--multigpu',default=False)
     cfg.add_argument('--epochs',default=80)
     cfg.add_argument('--decay_ep',default=5)
@@ -61,8 +61,8 @@ def get_arg():
     cfg.add_argument('--k_way',default=5)
     cfg.add_argument('--n_shot',default=5)
     cfg.add_argument('--query',default=10)
-    cfg.add_argument('--backbone',default='mymodel',choices=['dgcnn','mv','gaitset','mymodel','pointview'])
-    cfg.add_argument('--fs_head',type=str,default='Trip_CIA',choices=['protonet','cia','trip','pv_trip','Trip_CIA'])
+    cfg.add_argument('--backbone',default='dgcnn',choices=['dgcnn','mv','gaitset','mymodel','pointview'])
+    cfg.add_argument('--fs_head',type=str,default='MetaOp',choices=['protonet','cia','trip','pv_trip','Trip_CIA','MetaOp'])
     cfg.add_argument('--fold',default=2)
     # ===================================#
     

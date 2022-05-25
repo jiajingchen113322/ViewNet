@@ -145,6 +145,11 @@ class Mymodel(nn.Module):
         
         self.final=nn.Linear(128,self.hidden_dim)
 
+        self.compress=nn.Sequential(nn.Linear(62,16),
+                                nn.ReLU(),
+                                nn.Linear(16,1))
+
+
 
     def frame_max(self, x):
         return torch.max(x, 1)
@@ -212,7 +217,10 @@ class Mymodel(nn.Module):
             feature.append(z)
         feature = torch.cat(feature, 2).permute(2, 0, 1).contiguous()
         feature=self.final(feature)
-        return feature
+
+        a=self.compress(feature.permute(1,2,0)).squeeze()
+
+        return a
 
 
 if __name__=='__main__':

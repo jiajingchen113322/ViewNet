@@ -22,7 +22,7 @@ from model.fs_module.cia import CIA
 from model.fs_module.trip import trip
 from model.fs_module.pointview_trip import pointview_trip
 from model.fs_module.contrastive_loss_bin import Trip_CIA
-
+from model.fs_module.MetaOp import Class_head_MetaOpt
 
 #===============================
 
@@ -91,6 +91,9 @@ class fs_network(nn.Module):
             print('Trip_CIA is loaded')
             return Trip_CIA(k_way=self.k,n_shot=self.n,query=self.query)
 
+        elif fs=='MetaOp':
+            print('MetaOp is loaded')
+            return Class_head_MetaOpt(way=self.k,shot=self.n,query=self.query)
 
         else:
             raise ValueError('Illegal fs_head')
