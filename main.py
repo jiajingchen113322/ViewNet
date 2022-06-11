@@ -4,8 +4,8 @@ import argparse
 import numpy as np
 
 
-# from Dataloader.model_net_cross_val import get_sets
-from Dataloader.scanobjectnn_cross_val import get_sets
+from Dataloader.model_net_cross_val import get_sets
+# from Dataloader.scanobjectnn_cross_val import get_sets
 
 # from Dataloader.shapenet_cross_val import get_sets # not used
 # from Dataloader.modelnet40_fs import get_sets # not used
@@ -28,7 +28,7 @@ import logging
 # ============== Get Configuration =================
 def get_arg():
     cfg=argparse.ArgumentParser()
-    cfg.add_argument('--exp_name',default='dgcnn_MetaOp_5k5s10q_fold2')
+    cfg.add_argument('--exp_name',default='Mymodel_5k5s10q_tipcia_fold3_pair')
     cfg.add_argument('--multigpu',default=False)
     cfg.add_argument('--epochs',default=80)
     cfg.add_argument('--decay_ep',default=5)
@@ -40,31 +40,36 @@ def get_arg():
     cfg.add_argument('--lr_sch',default=False)
     cfg.add_argument('--data_aug',default=True)
 
+
+
+    # ======== few shot cfg =============#
+    cfg.add_argument('--k_way',default=5)
+    cfg.add_argument('--n_shot',default=5)
+    cfg.add_argument('--query',default=10)
+    cfg.add_argument('--backbone',default='mymodel',choices=['dgcnn','mv','gaitset','mymodel'])
+    cfg.add_argument('--fs_head',type=str,default='Trip_CIA',choices=['protonet','cia','trip','pv_trip','Trip_CIA','MetaOp','Relation'])
+    cfg.add_argument('--fold',default=3)
+    # ===================================#
+
+
     # ======== path needed ==============#
     cfg.add_argument('--project_path',default='/home/jchen152/workspace/Few_Shot_Point_Cloud')
 
     # === data path==== 
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/modelnet40_fs_crossvalidation') # ModelNet40
-    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ModelNet40_C_fewshot') #ModelNet40_C
-    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ScanObjectNN_fs_crossvalidation/ScanObjectNN_fs_cross_validation/Data') #ScanObjectNN
+    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ModelNet40_C_fewshot') #ModelNet40_C
+    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ScanObjectNN_fs_crossvalidation/ScanObjectNN_fs_cross_validation/Data') #ScanObjectNN
 
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ShapeNet') #ShapeNet
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ShapeNet_fs70') #ShapeNet_fs70
     # ================
 
 
-    cfg.add_argument('--exp_folder_name',default='ScanObjectNN_cross')
+    cfg.add_argument('--exp_folder_name',default='ModelNet40_C_cross')
     # ===================================#
 
     
-    # ======== few shot cfg =============#
-    cfg.add_argument('--k_way',default=5)
-    cfg.add_argument('--n_shot',default=5)
-    cfg.add_argument('--query',default=10)
-    cfg.add_argument('--backbone',default='dgcnn',choices=['dgcnn','mv','gaitset','mymodel','pointview'])
-    cfg.add_argument('--fs_head',type=str,default='MetaOp',choices=['protonet','cia','trip','pv_trip','Trip_CIA','MetaOp'])
-    cfg.add_argument('--fold',default=2)
-    # ===================================#
+   
     
     return cfg.parse_args()
 cfg=get_arg()
