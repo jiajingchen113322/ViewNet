@@ -28,13 +28,13 @@ import logging
 # ============== Get Configuration =================
 def get_arg():
     cfg=argparse.ArgumentParser()
-    cfg.add_argument('--exp_name',default='Mymodel_5k5s10q_tipcia_fold3_pair')
+    cfg.add_argument('--exp_name',default='Mymodel_5k5s10q_tipcia_fold3')
     cfg.add_argument('--multigpu',default=False)
     cfg.add_argument('--epochs',default=80)
     cfg.add_argument('--decay_ep',default=5)
     cfg.add_argument('--gamma',default=0.7)
     cfg.add_argument('--lr',default=1e-4)
-    cfg.add_argument('--train',action='store_true',default=True)
+    cfg.add_argument('--train',action='store_true',default=False)
     cfg.add_argument('--seed',default=0)
     cfg.add_argument('--device',default='cuda')
     cfg.add_argument('--lr_sch',default=False)
@@ -56,8 +56,8 @@ def get_arg():
     cfg.add_argument('--project_path',default='/home/jchen152/workspace/Few_Shot_Point_Cloud')
 
     # === data path==== 
-    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/modelnet40_fs_crossvalidation') # ModelNet40
-    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ModelNet40_C_fewshot') #ModelNet40_C
+    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/modelnet40_fs_crossvalidation') # ModelNet40
+    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ModelNet40_C_fewshot') #ModelNet40_C
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ScanObjectNN_fs_crossvalidation/ScanObjectNN_fs_cross_validation/Data') #ScanObjectNN
 
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ShapeNet') #ShapeNet
@@ -65,7 +65,7 @@ def get_arg():
     # ================
 
 
-    cfg.add_argument('--exp_folder_name',default='ModelNet40_C_cross')
+    cfg.add_argument('--exp_folder_name',default='ModelNet40_cross')
     # ===================================#
 
     
@@ -78,14 +78,14 @@ cfg=get_arg()
 
 
 # ============= create logging ==============
-def get_logger():
+def get_logger(file_name='accuracy.log'):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('%(asctime)s, %(name)s, %(message)s')
 
     ########### this is used to set the log file ##########
-    file_handler = logging.FileHandler('accuracy.log')
+    file_handler = logging.FileHandler(file_name)
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     #######################################################
@@ -102,12 +102,38 @@ def get_logger():
     ##############################################################################
 
     return logger
-
-logger=get_logger()
 # ============================================
 
 
+def test_model(model,val_loader,cfg):
+    global logger
+    logger=get_logger(file_name='testing_result.log')
+
+    exp_path=os.path.join(cfg.project_path,cfg.exp_folder_name,cfg.exp_name,'pth_file')
+    picked_pth=sorted(os.listdir(exp_path),key=lambda x:int(x.split('_')[-1]))[-1]
+    pth_file=torch.load(os.path.join(exp_path,picked_pth))
+    model.load_state_dict(pth_file['model_state'])
+    
+
+    model=model.cuda()
+    bar=tqdm(val_loader,ncols=100,unit='batch',leave=False)
+    summary=run_one_epoch(model,bar,'test',loss_func=None)
+
+    acc_list=summary['acc']
+
+    mean_acc=np.mean(acc_list)
+    std_acc=np.std(acc_list)
+
+    interval=1.960*(std_acc/np.sqrt(len(acc_list)))
+    logger.debug('Mean: {}, Interval: {}'.format(mean_acc*100,interval*100))
+
+
+
 def main(cfg):
+    global logger
+    logger=get_logger()
+
+
     np.random.seed(cfg.seed)
     torch.manual_seed(cfg.seed)
     torch.cuda.manual_seed(cfg.seed)
@@ -124,7 +150,7 @@ def main(cfg):
         train_model(model,train_loader,val_loader,cfg)
     
     else:
-        pass
+        test_model(model,val_loader,cfg)
     
 
 
