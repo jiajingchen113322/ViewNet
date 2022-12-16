@@ -4,8 +4,8 @@ import argparse
 import numpy as np
 
 
-from Dataloader.model_net_cross_val import get_sets
-# from Dataloader.scanobjectnn_cross_val import get_sets
+# from Dataloader.model_net_cross_val import get_sets
+from Dataloader.scanobjectnn_cross_val import get_sets
 
 # from Dataloader.shapenet_cross_val import get_sets # not used
 # from Dataloader.modelnet40_fs import get_sets # not used
@@ -28,13 +28,13 @@ import logging
 # ============== Get Configuration =================
 def get_arg():
     cfg=argparse.ArgumentParser()
-    cfg.add_argument('--exp_name',default='Mymodel_5k5s10q_tipcia_fold3')
+    cfg.add_argument('--exp_name',default='Mymodel_5k5s10q_tipcia_proto_fold2')
     cfg.add_argument('--multigpu',default=False)
     cfg.add_argument('--epochs',default=80)
     cfg.add_argument('--decay_ep',default=5)
     cfg.add_argument('--gamma',default=0.7)
     cfg.add_argument('--lr',default=1e-4)
-    cfg.add_argument('--train',action='store_true',default=False)
+    cfg.add_argument('--train',action='store_true',default=True)
     cfg.add_argument('--seed',default=0)
     cfg.add_argument('--device',default='cuda')
     cfg.add_argument('--lr_sch',default=False)
@@ -48,24 +48,24 @@ def get_arg():
     cfg.add_argument('--query',default=10)
     cfg.add_argument('--backbone',default='mymodel',choices=['dgcnn','mv','gaitset','mymodel'])
     cfg.add_argument('--fs_head',type=str,default='Trip_CIA',choices=['protonet','cia','trip','pv_trip','Trip_CIA','MetaOp','Relation'])
-    cfg.add_argument('--fold',default=3)
+    cfg.add_argument('--fold',default=2)
     # ===================================#
 
 
     # ======== path needed ==============#
     cfg.add_argument('--project_path',default='/home/jchen152/workspace/Few_Shot_Point_Cloud')
-
+    
     # === data path==== 
-    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/modelnet40_fs_crossvalidation') # ModelNet40
+    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/modelnet40_fs_crossvalidation') # ModelNet40
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ModelNet40_C_fewshot') #ModelNet40_C
-    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ScanObjectNN_fs_crossvalidation/ScanObjectNN_fs_cross_validation/Data') #ScanObjectNN
+    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ScanObjectNN_fs_crossvalidation/ScanObjectNN_fs_cross_validation/Data') #ScanObjectNN
 
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ShapeNet') #ShapeNet
     # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ShapeNet_fs70') #ShapeNet_fs70
     # ================
 
 
-    cfg.add_argument('--exp_folder_name',default='ModelNet40_cross')
+    cfg.add_argument('--exp_folder_name',default='ScanObjectNN_cross')
     # ===================================#
 
     
@@ -178,7 +178,7 @@ def train_model(model,train_loader,val_loader,cfg):
         mean_acc=np.mean(epsum['acc'])
         summary={'meac':mean_acc}
         summary["loss/valid"]=np.mean(epsum['loss'])
-        return summary,epsum['cfm']
+        return summary,epsum['cfm'],epsum['acc']
     
     
     # ======== define exp path ===========
@@ -205,10 +205,12 @@ def train_model(model,train_loader,val_loader,cfg):
     
     # ========= train start ===============
     acc_list=[]
+    interval_list=[]
+
     tqdm_epochs=tqdm(range(cfg.epochs),unit='epoch',ncols=100)
     for e in tqdm_epochs:
         train_summary=train_one_epoch()
-        val_summary,conf_mat=eval_one_epoch()
+        val_summary,conf_mat,batch_acc_list=eval_one_epoch()
         summary={**train_summary,**val_summary}
         
         if cfg.lr_sch:
@@ -216,7 +218,18 @@ def train_model(model,train_loader,val_loader,cfg):
         
         accuracy=val_summary['meac']
         acc_list.append(val_summary['meac'])
-        logger.debug('epoch {}: {}. Highest: {}'.format(e,accuracy,np.max(acc_list)))
+
+        # === get 95% interval =====
+        std_acc=np.std(batch_acc_list)
+        interval=1.960*(std_acc/np.sqrt(len(batch_acc_list)))
+        interval_list.append(interval)
+
+        max_acc_index=np.argmax(acc_list)
+        max_ac=acc_list[max_acc_index]
+        max_interval=interval_list[max_acc_index]
+        # ===========================
+
+        logger.debug('epoch {}: {}. Highest: {}. Interval: {}'.format(e,accuracy,max_ac,max_interval))
         # print('epoch {}: {}. Highese: {}'.format(e,accuracy,np.max(acc_list)))
         
         if np.max(acc_list)==acc_list[-1]:
