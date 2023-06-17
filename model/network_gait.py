@@ -124,7 +124,7 @@ class fs_network(nn.Module):
 
 
 if __name__=='__main__':
-    fs_net=fs_network(k_way=5,n_shot=1,query=3,backbone='dgcnn',fs='cia')
+    fs_net=fs_network(k_way=5,n_shot=1,query=3,backbone='mymodel',fs='Trip_CIA')
     sample_inpt=torch.randn((20,3,1024))
     pred,loss=fs_net(sample_inpt)
     a=1

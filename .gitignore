@@ -10,3 +10,8 @@ Analysis
 ShapeNet_3cross
 ShapeNet70*
 *.npy
+Exp
+ModelNet40_C_cross
+ModelNet40_cross
+ScanObjectNN_cross
+Ablation
