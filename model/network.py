@@ -11,7 +11,7 @@ import torch.nn.functional as F
 from model.backbone.DGCNN import DGCNN_fs
 from model.backbone.multiview import mutiview_net
 from model.backbone.Gaitset_net import Gateset_net
-from model.backbone.mymodel_moreview import Mymodel
+from model.backbone.mymodel_moreview import ViewNet
 from model.backbone.mymodel_pointview import pointview
 # =============================
 
@@ -28,7 +28,7 @@ from model.fs_module.RelationNet import RelationNet
 #===============================
 
 class fs_network(nn.Module):
-    def __init__(self,k_way,n_shot,query,backbone='mymodel',fs='cia'):
+    def __init__(self,k_way,n_shot,query,backbone='ViewNet',fs='Trip_CIA'):
         super().__init__()
         self.k=k_way
         self.n=n_shot
@@ -58,7 +58,7 @@ class fs_network(nn.Module):
         
         elif backbone=='mymodel':
             print('mymodel is loaded')
-            return Mymodel()
+            return ViewNet()
         
         elif backbone=='pointview':
             print('pointview is loaded')
@@ -124,7 +124,7 @@ class fs_network(nn.Module):
 
 
 if __name__=='__main__':
-    fs_net=fs_network(k_way=5,n_shot=1,query=3,backbone='mymodel',fs='Trip_CIA')
+    fs_net=fs_network(k_way=5,n_shot=1,query=3,backbone='ViewNet',fs='Trip_CIA')
     sample_inpt=torch.randn((20,3,1024))
     pred,loss=fs_net(sample_inpt)
     a=1
