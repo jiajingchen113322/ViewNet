@@ -10,7 +10,7 @@ Here are some required arugments you need to give
 ```
 --exp_name: the experiment name you give  
 --dataset: you could fill one of ['ScanObjectNN','ModeNet40','ModeNet40C'].  
---data_path: the path you save the dataset  
+--data_path: the path of the dataset  
 --k_way: the number of classes.  
 --n_shot: the number of shots.  
 --query: the query number  
