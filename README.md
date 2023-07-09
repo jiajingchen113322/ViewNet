@@ -47,7 +47,7 @@ Your experiment reult will be recorded in ./Exp/ScanObjectNN
 
 # ModelNet40
 ## Data Obtaining
-Similar to ScanObjectNN dataset, you could download our preprocessed data [here](https://drive.google.com/file/d/10faoJ5rRT96Nhdqo9tGD3q7Vg_ZZ2apZ/view?usp=sharing), or you could download the raw data from (here)[https://modelnet.cs.princeton.edu/], and make it a structure like shown above in ScanObjectNN.
+Similar to ScanObjectNN dataset, you could download our preprocessed data [here](https://drive.google.com/file/d/10faoJ5rRT96Nhdqo9tGD3q7Vg_ZZ2apZ/view?usp=sharing), or you could download the raw data from [here](https://modelnet.cs.princeton.edu/), and make it a structure like shown above in ScanObjectNN.
 
 ## Run Experiment
 Run the following code:
