@@ -56,8 +56,8 @@ class fs_network(nn.Module):
             return Gateset_net()
         
         
-        elif backbone=='mymodel':
-            print('mymodel is loaded')
+        elif backbone=='ViewNet':
+            print('ViewNet is loaded')
             return ViewNet()
         
         elif backbone=='pointview':

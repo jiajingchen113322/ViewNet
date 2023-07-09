@@ -5,17 +5,12 @@ import numpy as np
 
 
 # from Dataloader.model_net_cross_val import get_sets
-from Dataloader.scanobjectnn_cross_val import get_sets
-
-# from Dataloader.shapenet_cross_val import get_sets # not used
-# from Dataloader.modelnet40_fs import get_sets # not used
-
+# from Dataloader.scanobjectnn_cross_val import get_sets
 
 from util.get_acc import cal_cfm
 import torch.nn as nn
 
 # ======== load model =========
-# from model.network import fs_network
 from model.network import fs_network
 
 
@@ -28,54 +23,57 @@ import logging
 # ============== Get Configuration =================
 def get_arg():
     cfg=argparse.ArgumentParser()
-    cfg.add_argument('--exp_name',default='Mymodel_5k5s10q_tipcia_proto_fold2')
+    cfg.add_argument('--exp_name',default='try')
     cfg.add_argument('--multigpu',default=False)
-    cfg.add_argument('--epochs',default=80)
-    cfg.add_argument('--decay_ep',default=5)
-    cfg.add_argument('--gamma',default=0.7)
-    cfg.add_argument('--lr',default=1e-4)
+    cfg.add_argument('--epochs',default=80,type=int)
+    cfg.add_argument('--decay_ep',default=5,type=int)
+    cfg.add_argument('--gamma',default=0.7,type=float)
+    cfg.add_argument('--lr',default=1e-4,type=float)
     cfg.add_argument('--train',action='store_true',default=True)
     cfg.add_argument('--seed',default=0)
     cfg.add_argument('--device',default='cuda')
     cfg.add_argument('--lr_sch',default=False)
     cfg.add_argument('--data_aug',default=True)
-
+    cfg.add_argument('--dataset',default='ModeNet40C',choices=['ScanObjectNN','ModeNet40','ModeNet40C'])
 
 
     # ======== few shot cfg =============#
-    cfg.add_argument('--k_way',default=5)
-    cfg.add_argument('--n_shot',default=5)
-    cfg.add_argument('--query',default=10)
+    cfg.add_argument('--k_way',default=5,type=int)
+    cfg.add_argument('--n_shot',default=1,type=int)
+    cfg.add_argument('--query',default=10,type=int)
     cfg.add_argument('--backbone',default='ViewNet',choices=['dgcnn','mv','gaitset','ViewNet'])
     cfg.add_argument('--fs_head',type=str,default='Trip_CIA',choices=['protonet','cia','trip','pv_trip','Trip_CIA','MetaOp','Relation'])
-    cfg.add_argument('--fold',default=2)
+    cfg.add_argument('--fold',default=0)
     # ===================================#
 
 
     # ======== path needed ==============#
-    cfg.add_argument('--project_path',default='/home/jchen152/workspace/Few_Shot_Point_Cloud')
-    
-    # === data path==== 
-    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/modelnet40_fs_crossvalidation') # ModelNet40
-    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ModelNet40_C_fewshot') #ModelNet40_C
-    cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ScanObjectNN_fs_crossvalidation/ScanObjectNN_fs_cross_validation/Data') #ScanObjectNN
-
-    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ShapeNet') #ShapeNet
-    # cfg.add_argument('--data_path',default='/home/jchen152/workspace/Data/ShapeNet_fs70') #ShapeNet_fs70
-    # ================
-
-
-    cfg.add_argument('--exp_folder_name',default='ScanObjectNN_cross')
-    # ===================================#
-
-    
-   
-    
+    cfg.add_argument('--project_path',default=None,help='The path you save this project')
+    cfg.add_argument('--data_path',default='D:/Computer_vision/Dataset/ModelNet40_C_fewshot') 
+    # ===================================#    
     return cfg.parse_args()
+
+
 cfg=get_arg()
 # ==================================================
+if cfg.project_path is None:
+    cfg.project_path=os.path.dirname(os.path.abspath(__file__))
 
 
+if cfg.dataset=='ScanObjectNN':
+    cfg.exp_folder_name='ScanObjectNN'
+    from Dataloader.scanobjectnn_cross_val import get_sets
+
+elif cfg.dataset=='ModeNet40':
+    cfg.exp_folder_name='ModelNet40'
+    from Dataloader.model_net_cross_val import get_sets
+    
+elif cfg.dataset=='ModeNet40C':
+    cfg.exp_folder_name='ModelNet40C'
+    from Dataloader.model_net_cross_val import get_sets
+
+else:
+    raise ValueError('Wrong Dataset Name')
 
 # ============= create logging ==============
 def get_logger(file_name='accuracy.log'):
@@ -85,7 +83,11 @@ def get_logger(file_name='accuracy.log'):
     formatter = logging.Formatter('%(asctime)s, %(name)s, %(message)s')
 
     ########### this is used to set the log file ##########
-    file_handler = logging.FileHandler(file_name)
+    exp_file_folder=os.path.join(cfg.project_path,'Exp',cfg.exp_folder_name,cfg.exp_name)
+    if not os.path.exists(exp_file_folder):
+        os.makedirs(exp_file_folder)
+    
+    file_handler = logging.FileHandler(os.path.join(exp_file_folder,file_name))
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     #######################################################
@@ -182,7 +184,7 @@ def train_model(model,train_loader,val_loader,cfg):
     
     
     # ======== define exp path ===========
-    exp_path=os.path.join(cfg.project_path,cfg.exp_folder_name,cfg.exp_name)
+    exp_path=os.path.join(cfg.project_path,'Exp',cfg.exp_folder_name,cfg.exp_name)
     if not os.path.exists(exp_path):
         os.makedirs(exp_path)
 
