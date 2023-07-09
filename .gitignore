@@ -7,8 +7,6 @@ other
 condor.*
 command.txt
 Analysis
-ShapeNet_3cross
-ShapeNet70*
 *.npy
 Exp
 ModelNet40_C_cross

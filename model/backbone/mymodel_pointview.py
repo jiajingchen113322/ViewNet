@@ -4,14 +4,14 @@ sys.path.append(os.getcwd())
 
 import torch
 import torch.nn as nn
-from model.backbone.mymodel_moreview import Mymodel
+from model.backbone.mymodel_moreview import ViewNet
 from model.backbone.DGCNN import DGCNN_fs
 
 
 class pointview(nn.Module):
     def __init__(self):
         super().__init__()
-        self.sideview=Mymodel()
+        self.sideview=ViewNet()
         self.pointmodel=DGCNN_fs()
         self.hidden_dim=256
         self.linear=nn.Linear(512,self.hidden_dim)
