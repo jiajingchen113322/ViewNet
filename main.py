@@ -16,7 +16,7 @@ import torch.nn as nn
 
 # ======== load model =========
 # from model.network import fs_network
-from model.network_gait import fs_network
+from model.network import fs_network
 
 
 import os
@@ -46,7 +46,7 @@ def get_arg():
     cfg.add_argument('--k_way',default=5)
     cfg.add_argument('--n_shot',default=5)
     cfg.add_argument('--query',default=10)
-    cfg.add_argument('--backbone',default='mymodel',choices=['dgcnn','mv','gaitset','mymodel'])
+    cfg.add_argument('--backbone',default='ViewNet',choices=['dgcnn','mv','gaitset','ViewNet'])
     cfg.add_argument('--fs_head',type=str,default='Trip_CIA',choices=['protonet','cia','trip','pv_trip','Trip_CIA','MetaOp','Relation'])
     cfg.add_argument('--fold',default=2)
     # ===================================#

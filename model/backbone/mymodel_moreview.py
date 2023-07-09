@@ -112,7 +112,7 @@ class view_pooling_attention(nn.Module):
 
 
 
-class Mymodel(nn.Module):
+class ViewNet(nn.Module):
     def __init__(self):
         super().__init__()
         self.pcview=PCViews()
@@ -232,6 +232,6 @@ if __name__=='__main__':
     '''
 
     inpt=torch.randn((20,3,1024))
-    network=Mymodel()
+    network=ViewNet()
     out=network(inpt)
     a=1
