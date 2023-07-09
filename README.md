@@ -1,6 +1,6 @@
 # A Novel Projection-Based Backbone with View Pooling for Few-shot Point Cloud Classification (CVPR2023)
 This is the pytorch implementation of ViewNet.  
-**For a quick learning, you could go to ./model/network.py directly**. I incoporate several backbone and few-shot head into this code, as well as a simple example in it. Feel free to take a look. The ViewNet's Structure is shown below. You could refer to [our paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Chen_ViewNet_A_Novel_Projection-Based_Backbone_With_View_Pooling_for_Few-Shot_CVPR_2023_paper.pdf) for more detail.
+**For a quick learning, you could go to ./model/network.py** directly. I incoporate several backbone and few-shot head into this code, as well as a simple example in it. Feel free to take a look. The ViewNet's Structure is shown below. You could refer to [our paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Chen_ViewNet_A_Novel_Projection-Based_Backbone_With_View_Pooling_for_Few-Shot_CVPR_2023_paper.pdf) for more detail.
 
 ![Alt text](https://github.com/jiajingchen113322/ViewNet/blob/master/Img/ViewNet.PNG)
 
