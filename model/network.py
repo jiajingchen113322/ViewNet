@@ -13,6 +13,7 @@ from model.backbone.multiview import mutiview_net
 from model.backbone.Gaitset_net import Gateset_net
 from model.backbone.mymodel_moreview import ViewNet
 from model.backbone.mymodel_pointview import pointview
+from model.backbone.PointTransformer import PointTransformerCls
 # =============================
 
 
@@ -63,6 +64,11 @@ class fs_network(nn.Module):
         elif backbone=='pointview':
             print('pointview is loaded')
             return pointview()
+        
+        
+        elif backbone=='Point_Trans':
+            print('point transformer is loaded')
+            return PointTransformerCls()
         
         else:
             raise ValueError('Illegal Backbone')
