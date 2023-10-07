@@ -41,7 +41,7 @@ def get_arg():
     cfg.add_argument('--k_way',default=5,type=int)
     cfg.add_argument('--n_shot',default=1,type=int)
     cfg.add_argument('--query',default=10,type=int)
-    cfg.add_argument('--backbone',default='ViewNet',choices=['dgcnn','mv','gaitset','ViewNet'])
+    cfg.add_argument('--backbone',default='ViewNet',choices=['dgcnn','mv','gaitset','ViewNet','Point_Trans'])
     cfg.add_argument('--fs_head',type=str,default='Trip_CIA',choices=['protonet','cia','trip','pv_trip','Trip_CIA','MetaOp','Relation'])
     cfg.add_argument('--fold',default=0)
     # ===================================#
